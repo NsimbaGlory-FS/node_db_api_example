@@ -54,6 +54,7 @@ router.get("/:princiliaId", (req, res, next) => {
 
 router.patch("/:princiliaId", (req, res, next) => {
   const princiliaId = req.params.princiliaId;
+
   res.json({
     Message: "Princilias - PATCH",
     id: princiliaId,
