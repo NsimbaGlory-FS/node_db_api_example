@@ -57,9 +57,6 @@ app.use((error, req, res, next) => {
 });
 
 //connect to mongodb
-mongoose.connect(process.env.mongoDBURL
-    
-    
-    
-    
-module.exports = app);
+mongoose.connect(process.env.mongoDBURL);
+
+module.exports = app;
