@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const Princilia = require("../models/princilia");
 
@@ -10,7 +11,7 @@ router.get("/", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
   const newPrincilia = new Princilia({
-    _id: Mongoose.Types.ObjectId(),
+    _id: mongoose.Types.ObjectId(),
     title: req.body.title,
     author: req.body.author,
   });
@@ -22,9 +23,25 @@ router.post("/", (req, res, next) => {
       console.log(result);
       res.status(200).json({
         message: "Princilia Saved",
+        book: {
+          title: result.title,
+          author: result.author,
+          id: result._id,
+          metadata: {
+            method: req.method,
+            host: req.hostname,
+          },
+        },
       });
     })
-    .catch();
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).json({
+        error: {
+          message: err.message,
+        },
+      });
+    });
 });
 
 router.get("/:princiliaId", (req, res, next) => {
