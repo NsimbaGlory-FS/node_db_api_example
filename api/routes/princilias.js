@@ -11,7 +11,7 @@ router.get("/", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
   const newPrincilia = new Princilia({
-    _id: mongoose.Types.ObjectId(),
+    _id: new mongoose.Types.ObjectId(),
     title: req.body.title,
     author: req.body.author,
   });
