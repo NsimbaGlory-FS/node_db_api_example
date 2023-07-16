@@ -57,6 +57,13 @@ app.use((error, req, res, next) => {
 });
 
 //connect to mongodb
+
 mongoose.connect(process.env.mongoDBURL);
+
+const db = mongoose.connection;
+db.on("error", () => console.log("connection:"));
+db.once("open", () => {
+  console.log("Connected successfully to MongoDB!");
+});
 
 module.exports = app;
