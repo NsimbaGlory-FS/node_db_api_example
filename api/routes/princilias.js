@@ -8,31 +8,6 @@ router.get("/", (req, res, next) => {
     Message: "Princilias - GET",
   });
 });
-newPrincilia
-  .save()
-  .then((result) => {
-    console.log(result);
-    res.status(200).json({
-      message: "Princilia Saved",
-      book: {
-        title: result.title,
-        author: result.author,
-        id: result._id,
-        metadata: {
-          method: req.method,
-          host: req.hostname,
-        },
-      },
-    });
-  })
-  .catch((err) => {
-    console.error(err.message);
-    res.status(500).json({
-      error: {
-        message: err.message,
-      },
-    });
-  });
 
 router.post("/", (req, res, next) => {
   const newPrincilia = new Princilia({
@@ -77,32 +52,6 @@ router.get("/:princiliaId", (req, res, next) => {
   });
 });
 
-newPrincilia
-  .save()
-  .then((result) => {
-    console.log(result);
-    res.status(200).json({
-      message: "Princilia Saved",
-      book: {
-        title: result.title,
-        author: result.author,
-        id: result._id,
-        metadata: {
-          method: req.method,
-          host: req.hostname,
-        },
-      },
-    });
-  })
-  .catch((err) => {
-    console.error(err.message);
-    res.status(500).json({
-      error: {
-        message: err.message,
-      },
-    });
-  });
-
 router.patch("/:princiliaId", (req, res, next) => {
   const princiliaId = req.params.princiliaId;
 
@@ -119,30 +68,5 @@ router.delete("/:princiliaId", (req, res, next) => {
     id: princiliaId,
   });
 });
-newPrincilia
-  .save()
-  .then((result) => {
-    console.log(result);
-    res.status(200).json({
-      message: "Princilia Saved",
-      book: {
-        title: result.title,
-        author: result.author,
-        id: result._id,
-        metadata: {
-          method: req.method,
-          host: req.hostname,
-        },
-      },
-    });
-  })
-  .catch((err) => {
-    console.error(err.message);
-    res.status(500).json({
-      error: {
-        message: err.message,
-      },
-    });
-  });
 
 module.exports = router;
