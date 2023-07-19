@@ -43,7 +43,6 @@ router.post("/", (req, res, next) => {
     author: req.body.author,
   });
 
-  //write to the db
   newPrincilia
     .save()
     .then((result) => {
@@ -103,13 +102,44 @@ router.get("/:princiliaId", (req, res, next) => {
       });
     });
 });
+
 router.patch("/:princiliaId", (req, res, next) => {
   const princiliaId = req.params.princiliaId;
 
-  res.json({
-    Message: "Princilias - PATCH",
-    id: princiliaId,
-  });
+  const updatePrincilia = {
+    title: req.body.title,
+    author: req.body.author,
+  };
+
+  Princilia.updateOne(
+    {
+      _id: princiliaId,
+    },
+    {
+      $set: updatePrincilia,
+    }
+  )
+    .then((result) => {
+      res.status(200).json({
+        message: "Update Princilia",
+        Princilia: {
+          title: result.title,
+          author: result.author,
+          id: result._id,
+        },
+        metadata: {
+          host: req.hostname,
+          method: req.method,
+        },
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: {
+          message: err.message,
+        },
+      });
+    });
 });
 
 router.delete("/:princiliaId", (req, res, next) => {
