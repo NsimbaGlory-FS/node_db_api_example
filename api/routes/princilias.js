@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { updateOne } = require("../models/princilia");
+const { updatedOne } = require("../models/princilia");
 const router = express.Router();
 const Princilia = require("../models/princilia");
 
@@ -106,22 +106,22 @@ router.get("/:princiliaId", (req, res, next) => {
 router.patch("/:princiliaId", (req, res, next) => {
   const princiliaId = req.params.princiliaId;
 
-  const updatePrincilia = {
+  const updatedPrincilia = {
     title: req.body.title,
     author: req.body.author,
   };
 
-  Princilia.updateOne(
+  Princilia.updatedOne(
     {
       _id: princiliaId,
     },
     {
-      $set: updatePrincilia,
+      $set: updatedPrincilia,
     }
   )
     .then((result) => {
       res.status(200).json({
-        message: "Update Princilia",
+        message: "Updated Princilia",
         Princilia: {
           title: result.title,
           author: result.author,
@@ -148,17 +148,17 @@ router.delete("/:princiliaId", (req, res, next) => {
     Message: "Princilias - DELETE",
     id: princiliaId,
   });
-  Princilia.updateOne(
+  Princilia.updatedOne(
     {
       _id: princiliaId,
     },
     {
-      $set: updatePrincilia,
+      $set: updatedPrincilia,
     }
   )
     .then((result) => {
       res.status(200).json({
-        message: "Update Princilia",
+        message: "Updated Princilia",
         Princilia: {
           title: result.title,
           author: result.author,
