@@ -86,7 +86,7 @@ router.get("/:glociliaId", (req, res, next) => {
 
 router.patch("/:glociliaId", (req, res, next) => {
   const glociliaId = req.params.glociliaId;
-  Glocilia.findOne(glociliaId)
+  Glocilia.updateOne(glociliaId)
     .select("name")
     .populate("princilia")
     .exec()
