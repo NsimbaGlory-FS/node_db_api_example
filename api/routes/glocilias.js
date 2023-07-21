@@ -3,22 +3,10 @@ const Glocilia = require("../models/glocilia");
 const router = express.Router();
 const Messages = require("../../messages/messages");
 
-router.get("/", (req, res, next) => {
-  res.json({
-    Message: "Glocilias - GET",
-  });
-});
-
-router.post("/", (req, res, next) => {
-  res.json({
-    Message: "Glocilias - POST",
-  });
-});
-
-router.get("/:glociliaId", (req, res, next) => {
-  const glociliaId = req.params.glociliaId;
-  Glocilia.findById(glociliaId)
-    .select("name _id")
+router.get("/:glocilia", (req, res, next) => {
+  const glocilia = req.params.glocilia;
+  Glocilia.find(glocilia)
+    .select("name")
     .populate("princilia")
     .exec()
     .then((glocilia) => {
@@ -29,7 +17,7 @@ router.get("/:glociliaId", (req, res, next) => {
         });
       }
       res.status(201).json({
-        glocilia: glocilia,
+        author: glocilia,
       });
     })
     .catch((err) => {
@@ -41,13 +29,87 @@ router.get("/:glociliaId", (req, res, next) => {
     });
 });
 
-router.patch("/:glociliaId", (req, res, next) => {
-  const glociliaId = req.params.glociliaId;
-  res.json({
-    Message: "Glocilias - PATCH",
-    id: glociliaId,
-  });
+router.post("/", (req, res, next) => {
+  const glocilia = req.params.glocilia;
+  Glocilia.find(glocilia)
+    .select("name")
+    .populate("princilia")
+    .exec()
+    .then((glocilia) => {
+      if (!glocilia) {
+        console.log(glocilia);
+        return res.status(404).json.json({
+          message: Messages.glocilia_not_found,
+        });
+      }
+      res.status(201).json({
+        author: glocilia,
+      });
+    })
+
+    .catch((err) => {
+      res.json({
+        Message: "Glocilias - POST",
+        error: {
+          message: err.message,
+        },
+      });
+    });
 });
+
+router.get("/:glociliaId", (req, res, next) => {
+  const glociliaId = req.params.glociliaId;
+  Glocilia.findOne(glocilia)
+    .select("name")
+    .populate("princilia")
+    .exec()
+    .then((glocilia) => {
+      if (!glocilia) {
+        console.log(glocilia);
+        return res.status(404).json.json({
+          message: Messages.glocilia_not_found,
+        });
+      }
+      res.status(201).json({
+        author: glocilia,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: {
+          message: err.message,
+        },
+      });
+    });
+});
+
+router
+  .patch("/:glociliaId", (req, res, next) => {
+    const glocilia = req.params.glocilia;
+
+    Glocilia.findOne(glocilia).select("name").populate("princilia").exec();
+  })
+  .then((result) => {
+    res.status(200).json({
+      message: "Glocilia patch",
+      request: {
+        author: glocilia,
+        id: result._id,
+      },
+      metadata: {
+        host: req.hostname,
+        method: req.method,
+      },
+    });
+  })
+  .catch((err) => {
+    res.status(500).json({
+      Message: "Glocilias - PATCH",
+      error: {
+        message: err.message,
+      },
+    });
+  });
 
 router.delete("/:glociliaId", (req, res, next) => {
   const glociliaId = req.params.glociliaId;
