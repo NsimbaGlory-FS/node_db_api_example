@@ -1,6 +1,7 @@
 const express = require("express");
 const Glocilia = require("../models/glocilia");
 const router = express.Router();
+const Messages = require("../../messages/messages");
 
 router.get("/", (req, res, next) => {
   res.json({
@@ -18,12 +19,13 @@ router.get("/:glociliaId", (req, res, next) => {
   const glociliaId = req.params.glociliaId;
   Glocilia.findById(glociliaId)
     .select("name _id")
+    .populate("princilia")
     .exec()
     .then((glocilia) => {
       if (!glocilia) {
         console.log(glocilia);
         return res.status(404).json.json({
-          message: "Glocilia Not Found",
+          message: Messages.glocilia_not_found,
         });
       }
       res.status(201).json({
