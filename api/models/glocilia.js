@@ -7,7 +7,7 @@ const glociliaSchema = mongoose.Schema({
     require: true,
   },
   name: {
-    type: mongoose.Schema.Types.ObjectId(),
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Princilia",
     require: true,
   },
