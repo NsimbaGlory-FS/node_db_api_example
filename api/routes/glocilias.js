@@ -31,7 +31,7 @@ router.get("/:glocilia", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
   const glocilia = req.params.glocilia;
-  Glocilia.find(glocilia)
+  Glocilia.findOne(glocilia)
     .select("name")
     .populate("princilia")
     .exec()
