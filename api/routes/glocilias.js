@@ -2,9 +2,11 @@ const express = require("express");
 const Glocilia = require("../models/glocilia");
 const router = express.Router();
 const Messages = require("../../messages/messages");
+const glocilia = require("../models/glocilia");
 
 router.get("/:glocilia", (req, res, next) => {
-  const glocilia = req.params.glocilia;
+  console.log("this is get");
+
   Glocilia.find(glocilia)
     .select("name")
     .populate("princilia")
@@ -30,8 +32,7 @@ router.get("/:glocilia", (req, res, next) => {
 });
 
 router.post("/", (req, res, next) => {
-  const glocilia = req.params.glocilia;
-  Glocilia.findOne(glocilia)
+  Glocilia.clean(glocilia)
     .select("name")
     .populate("princilia")
     .exec()
@@ -59,9 +60,10 @@ router.post("/", (req, res, next) => {
 
 router.get("/:glociliaId", (req, res, next) => {
   const glociliaId = req.params.glociliaId;
-  Glocilia.findOne(glociliaId)
-    .select("name")
-    .populate("princilia")
+  glociliaId
+    .findById(glociliaId)
+    .select("name _id")
+    .populate("princilia", "title glocilia")
     .exec()
     .then((glocilia) => {
       if (!glocilia) {
