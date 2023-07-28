@@ -5,12 +5,7 @@ const router = express.Router();
 const Princilia = require("../models/princilia");
 
 router.get("/", (req, res, next) => {
-  res.json({
-    Message: "Princilias - GET",
-    _id: Princilia,
-  });
-  newPrincilia
-    .save()
+  Princilia.find({})
     .then((result) => {
       console.log(result);
       res.status(200).json({
@@ -72,12 +67,8 @@ router.post("/", (req, res, next) => {
 
 router.get("/:princiliaId", (req, res, next) => {
   const princiliaId = req.params.princiliaId;
-  res.json({
-    Message: "Princilias - GET",
-    id: princiliaId,
-  });
-  newPrincilia
-    .save()
+
+  Princilia.findById(princiliaId)
     .then((result) => {
       console.log(result);
       res.status(200).json({
@@ -142,18 +133,8 @@ router.patch("/:princiliaId", (req, res, next) => {
 
 router.delete("/:princiliaId", (req, res, next) => {
   const princiliaId = req.params.princiliaId;
-  res.json({
-    Message: "Princilias - DELETE",
-    id: princiliaId,
-  });
-  Princilia.updatedOne(
-    {
-      _id: princiliaId,
-    },
-    {
-      $set: updatedPrincilia,
-    }
-  )
+
+  Princilia.findByIdAndDelete(princiliaId)
     .then((result) => {
       res.status(200).json({
         message: "Updated Princilia",
