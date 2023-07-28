@@ -1,3 +1,4 @@
+const { request } = require("express");
 const express = require("express");
 const mongoose = require("mongoose");
 const { updatedOne } = require("../models/princilia");
@@ -95,12 +96,13 @@ router.get("/:princiliaId", (req, res, next) => {
 });
 
 router.patch("/:princiliaId", (req, res, next) => {
+  const updatedPrincilia = req.body;
+  console.log("test", updatedPrincilia);
+
   const princiliaId = req.params.princiliaId;
-  res.json({
-    Message: "Princilias - PATCH",
-    id: princiliaId,
-  });
-  Princilia.updatedOne(
+  console.log("id", princiliaId);
+
+  Princilia.updateOne(
     {
       _id: princiliaId,
     },
