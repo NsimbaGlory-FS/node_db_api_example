@@ -60,8 +60,7 @@ router.post("/", (req, res, next) => {
 
 router.get("/:glociliaId", (req, res, next) => {
   const glociliaId = req.params.glociliaId;
-  glociliaId
-    .findById(glociliaId)
+  Glocilia.findById(glociliaId)
     .select("name _id")
     .populate("princilia", "title glocilia")
     .exec()
