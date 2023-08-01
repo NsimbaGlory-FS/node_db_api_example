@@ -7,7 +7,7 @@ const glocilia = require("../models/glocilia");
 router.get("/:glocilia", (req, res, next) => {
   console.log("this is get");
 
-  Glocilia.find(glocilia)
+  Glocilia.find({})
     .select("name")
     .populate("princilia")
     .exec()
