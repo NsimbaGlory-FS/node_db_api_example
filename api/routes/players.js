@@ -1,17 +1,17 @@
 const { request } = require("express");
 const express = require("express");
 const mongoose = require("mongoose");
-const { updatedOne } = require("../models/princilia");
+const { updatedOne } = require("../models/player");
 const router = express.Router();
-const Princilia = require("../models/princilia");
+const Player = require("../models/player");
 
 router.get("/", (req, res, next) => {
-  Princilia.find({})
+  Player.find({})
     .then((result) => {
       console.log(result);
       res.status(200).json({
-        message: "Princilia Saved",
-        book: {
+        message: "Player Saved",
+        team: {
           title: result.title,
           author: result.author,
           id: result._id,
@@ -33,19 +33,19 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/", (req, res, next) => {
-  const newPrincilia = new Princilia({
+  const newPlayer = new Player({
     _id: new mongoose.Types.ObjectId(),
     title: req.body.title,
     author: req.body.author,
   });
 
-  newPrincilia
+  newPlayer
     .save()
     .then((result) => {
       console.log(result);
       res.status(200).json({
-        message: "Princilia Saved",
-        book: {
+        message: "Player Saved",
+        team: {
           title: result.title,
           author: result.author,
           id: result._id,
@@ -66,15 +66,15 @@ router.post("/", (req, res, next) => {
     });
 });
 
-router.get("/:princiliaId", (req, res, next) => {
-  const princiliaId = req.params.princiliaId;
+router.get("/:playerId", (req, res, next) => {
+  const playerId = req.params.playerId;
 
-  Princilia.findById(princiliaId)
+  Player.findById(playerId)
     .then((result) => {
       console.log(result);
       res.status(200).json({
-        message: "Princilia Saved",
-        book: {
+        message: "Player Saved",
+        team: {
           title: result.title,
           author: result.author,
           id: result._id,
@@ -95,25 +95,25 @@ router.get("/:princiliaId", (req, res, next) => {
     });
 });
 
-router.patch("/:princiliaId", (req, res, next) => {
-  const updatedPrincilia = req.body;
-  console.log("test", updatedPrincilia);
+router.patch("/:playerId", (req, res, next) => {
+  const updatedPlayer = req.body;
+  console.log("test", updatedPlayer);
 
-  const princiliaId = req.params.princiliaId;
-  console.log("id", princiliaId);
+  const playerId = req.params.playerId;
+  console.log("id", playerId);
 
-  Princilia.updateOne(
+  Player.updateOne(
     {
-      _id: princiliaId,
+      _id: playerId,
     },
     {
-      $set: updatedPrincilia,
+      $set: updatedPlayer,
     }
   )
     .then((result) => {
       res.status(200).json({
-        message: "Updated Princilia",
-        Princilia: {
+        message: "Updated Player",
+        Player: {
           title: result.title,
           author: result.author,
           id: result._id,
@@ -133,14 +133,14 @@ router.patch("/:princiliaId", (req, res, next) => {
     });
 });
 
-router.delete("/:princiliaId", (req, res, next) => {
-  const princiliaId = req.params.princiliaId;
+router.delete("/:playerId", (req, res, next) => {
+  const playerId = req.params.playerId;
 
-  Princilia.findByIdAndDelete(princiliaId)
+  Player.findByIdAndDelete(playerId)
     .then((result) => {
       res.status(200).json({
-        message: "Updated Princilia",
-        Princilia: {
+        message: "Updated Player",
+        Player: {
           title: result.title,
           author: result.author,
           id: result._id,
