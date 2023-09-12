@@ -3,7 +3,7 @@ const app = express();
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const teamRoutes = require("../api/routes/teams");
-//const princiliaRoutes = require("../api/routes/princilias");
+const playerRoutes = require("../api/routes/players");
 
 //middleawre for logging
 app.use(morgan("dev"));
@@ -38,7 +38,7 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/team", teamRoutes);
-//app.use("/princilias", princiliaRoutes);
+app.use("/players", playerRoutes);
 
 // add middleware to handle error and bad url paths
 app.use((req, res, next) => {
