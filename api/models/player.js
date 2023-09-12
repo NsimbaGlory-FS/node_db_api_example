@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 const princiliaSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  title: {
+  name: {
     type: String,
     require: true,
   },
-  author: {
-    type: String,
+  number: {
+    type: Number,
     require: true,
   },
 });
