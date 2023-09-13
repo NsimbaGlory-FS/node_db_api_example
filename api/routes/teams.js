@@ -3,7 +3,7 @@ const router = express.Router();
 const Messages = require("../../messages/messages");
 const team = require("../models/team");
 
-router.get("/:team", (req, res, next) => {
+router.get("/", (req, res, next) => {
   console.log("this is get");
 
   team.find({})
@@ -29,6 +29,8 @@ router.get("/:team", (req, res, next) => {
 });
 
 router.post("/", (req, res, next) => {
+  console.log('this is a post');
+  
   team.clean(team)
     .exec()
     .then((team) => {

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const princiliaSchema = mongoose.Schema({
+const playerSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: {
     type: String,
@@ -12,4 +12,4 @@ const princiliaSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Princilia", princiliaSchema);
+module.exports = mongoose.model("Player", playerSchema);
