@@ -106,11 +106,18 @@ router.patch("/:teamId", (req, res, next) => {
     });
 });
 
-router.delete("/:teamId", (req, res, next) => {
-  const teamId = req.params.teamId;
+router.delete("/:id/delete", async(req, res) => {
+  const team = await Team.findByIdAndRemove(req.body.id);
+
+  if(!team){
+    res.send("Team not fund")
+  }else{
+    team.remove()
+    res.send("team")
+  }
 
   Team.deleteOne({
-    _id: teamId,
+    _id: team,
   })
     .exec()
     .then((result) => {

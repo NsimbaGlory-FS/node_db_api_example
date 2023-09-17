@@ -34,9 +34,9 @@ router.get("/", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
   const newPlayer = new Player({
-    _id: new mongoose.Types.ObjectId(),
-    title: req.body.title,
-    author: req.body.author,
+    _id: mongoose.Types.ObjectId(),
+    name: req.body.name,
+    number: req.body.number,
   });
 
   newPlayer
@@ -46,8 +46,8 @@ router.post("/", (req, res, next) => {
       res.status(200).json({
         message: "Player Saved",
         team: {
-          title: result.title,
-          author: result.author,
+          name: result.name,
+          number: result.number,
           id: result._id,
           metadata: {
             method: req.method,
@@ -75,8 +75,8 @@ router.get("/:playerId", (req, res, next) => {
       res.status(200).json({
         message: "Player Saved",
         team: {
-          title: result.title,
-          author: result.author,
+          name: result.name,
+          number: result.number,
           id: result._id,
           metadata: {
             method: req.method,
@@ -96,11 +96,13 @@ router.get("/:playerId", (req, res, next) => {
 });
 
 router.patch("/:playerId", (req, res, next) => {
-  const updatedPlayer = req.body;
-  console.log("test", updatedPlayer);
-
   const playerId = req.params.playerId;
-  console.log("id", playerId);
+  
+  const updatedPlayer = {
+    name: req.body.name,
+    number: req.body.number
+  };
+  
 
   Player.updateOne(
     {
@@ -114,8 +116,8 @@ router.patch("/:playerId", (req, res, next) => {
       res.status(200).json({
         message: "Updated Player",
         Player: {
-          title: result.title,
-          author: result.author,
+          name: result.name,
+          number: result.number,
           id: result._id,
         },
         metadata: {
@@ -141,8 +143,8 @@ router.delete("/:playerId", (req, res, next) => {
       res.status(200).json({
         message: "Updated Player",
         Player: {
-          title: result.title,
-          author: result.author,
+          name: result.name,
+          number: result.number,
           id: result._id,
         },
         metadata: {
