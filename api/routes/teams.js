@@ -1,14 +1,18 @@
 const express = require("express");
 const { Mongoose } = require("mongoose");
-const messages = require("../../messages/messages");
 const router = express.Router();
 const Messages = require("../../messages/messages");
 const team = require("../models/team");
 
 router.get("/", (req, res, next) => {
-  console.log("this is get");
+ 
+  res.json({
+    message: "Team - GET"
+  })  
+   
+ })
 
-  team.find({})
+team.find({})
     .exec()
     .then((team) => {
       if (!team) {
@@ -18,7 +22,7 @@ router.get("/", (req, res, next) => {
         });
       }
       res.status(201).json({
-        author: team,
+        country: team,
       });
     })
     .catch((err) => {
@@ -28,7 +32,7 @@ router.get("/", (req, res, next) => {
         },
       });
     });
-});
+
 
 router.post("/", (req, res, next) => {
 
@@ -59,8 +63,7 @@ router.post("/", (req, res, next) => {
     })
 
   })
-   
-    .catch(err => {
+  .catch(err => {
      console.error(err.message);
      res.status(500).json({
        error:{
@@ -101,26 +104,39 @@ router.get("/:teamId", (req, res, next) => {
 
 router.patch("/:teamId", (req, res, next) => {
   const teamId = req.params.teamId;
-  Team.updateOne(teamId)
-    
-    .exec()
-    .then((team) => {
-      if (!team) {
-        console.log(team);
-        return res.status(404).json.json({
-          message: Messages.team_not_found,
-        });
+  
+  const updatedTeam = {
+    name: req.body.name,
+    country: req.body.country
+  };
+
+  Team.updatedOne ({
+    _id: teamId
+
+  }, {
+    $set: updatedTeam
+  }).then(result => {
+    res.status(200).json({
+      message: "Updated Team",
+      team: {
+        name: result.name,
+        country: result.country,
+        id: result._id
+      },
+      metadata: {
+        host: req.hostname,
+        method: req.method,
       }
-      res.status(201).json({
-        author: team,
-      });
+
+      })
     })
-    .catch((err) => {
+    
+    .catch(err => {
       res.status(500).json({
-        error: {
-          message: err.message,
+        error:{
+          message: err.message
         },
-      });
+      })
     });
 });
 
