@@ -1,4 +1,6 @@
 const express = require("express");
+const { Mongoose } = require("mongoose");
+const messages = require("../../messages/messages");
 const router = express.Router();
 const Messages = require("../../messages/messages");
 const team = require("../models/team");
@@ -29,31 +31,47 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/", (req, res, next) => {
-  console.log('this is a post');
-  
-  team.clean(team)
-    .exec()
-    .then((team) => {
-      if (!team) {
-        console.log(team);
-        return res.status(404).json.json({
-          message: Messages.team_not_found,
-        });
+
+  const newTeam = new Team({
+    _id: mongoose.Types.ObjectId(),
+    name: req.body.name,
+    country: req.body.country
+
+  });
+
+  // write to the db
+  newTeam.save()
+  .then(result => {
+    console.log(result);
+    res.status(200).json({
+      message: "Team Saved",
+      team: {
+        name: result.name,
+        country: result.country,
+        id: result._id,
+        metadata:{
+          method: req.method,
+          host: req.hostname
+        }
+
       }
-      res.status(201).json({
-        author: team,
-      });
+
     })
 
-    .catch((err) => {
-      res.json({
-        Message: "Teams - POST",
-        error: {
-          message: err.message,
-        },
-      });
+  })
+   
+    .catch(err => {
+     console.error(err.message);
+     res.status(500).json({
+       error:{
+         message: err.message
+       }
+     })
+      
     });
-});
+
+  });
+      
 
 router.get("/:teamId", (req, res, next) => {
   const teamId = req.params.teamId;
