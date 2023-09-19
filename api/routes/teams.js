@@ -1,18 +1,12 @@
 const express = require("express");
-const { Mongoose } = require("mongoose");
+const mongoose  = require("mongoose");
 const router = express.Router();
 const Messages = require("../../messages/messages");
-const team = require("../models/team");
+const Team = require("../models/team");
 
 router.get("/", (req, res, next) => {
- 
-  res.json({
-    message: "Team - GET"
-  })  
-   
- })
 
-team.find({})
+Team.find({})
     .exec()
     .then((team) => {
       if (!team) {
@@ -30,14 +24,14 @@ team.find({})
         error: {
           message: err.message,
         },
-      });
+      })
     });
 
-
+  });
 router.post("/", (req, res, next) => {
 
-  const newTeam = new Team({
-    _id: mongoose.Types.ObjectId(),
+  const newTeam = new team({
+    _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     country: req.body.country
 
@@ -110,7 +104,7 @@ router.patch("/:teamId", (req, res, next) => {
     country: req.body.country
   };
 
-  Team.updatedOne ({
+  team.updatedOne ({
     _id: teamId
 
   }, {
