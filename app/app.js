@@ -8,8 +8,7 @@ const playerRoutes = require("../api/routes/players");
 //middleawre for logging
 app.use(morgan("dev"));
 // parsing middleawre
-app.use(
-  express.urlencoded({
+app.use(express.urlencoded({
     extended: true,
   })
 );
