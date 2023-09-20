@@ -104,10 +104,9 @@ router.patch("/:teamId", (req, res, next) => {
     country: req.body.country
   };
 
-  team.updatedOne ({
-    _id: teamId
-
-  }, {
+  Team.updateOne (
+    {_id : teamId}, 
+    {
     $set: updatedTeam
   }).then(result => {
     res.status(200).json({
@@ -136,13 +135,6 @@ router.patch("/:teamId", (req, res, next) => {
 
 router.delete("/:id/delete", async(req, res) => {
   const team = await Team.findByIdAndRemove(req.body.id);
-
-  if(!team){
-    res.send("Team not fund")
-  }else{
-    team.remove()
-    res.send("team")
-  }
 
   Team.deleteOne({
     _id: team,
