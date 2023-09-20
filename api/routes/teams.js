@@ -133,7 +133,7 @@ router.patch("/:teamId", (req, res, next) => {
     });
 });
 
-router.delete("/:id/delete", async(req, res) => {
+router.delete("/:teamId", async(req, res) => {
   const team = await Team.findByIdAndRemove(req.body.id);
 
   Team.deleteOne({
@@ -145,7 +145,7 @@ router.delete("/:id/delete", async(req, res) => {
         message: "Team Deleted",
         request: {
           method: "GET",
-          url: "http://localhost:3000/teams/" + teamId,
+          url: "http://localhost:3000/teams/" + team,
         },
       });
     })
