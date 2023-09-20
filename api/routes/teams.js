@@ -30,7 +30,7 @@ Team.find({})
   });
 router.post("/", (req, res, next) => {
 
-  const newTeam = new team({
+  const newTeam = new Team({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     country: req.body.country
