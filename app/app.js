@@ -37,12 +37,12 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/team", teamRoutes);
-app.use("/players", playerRoutes);
+app.use("/player", playerRoutes);
 
 // add middleware to handle error and bad url paths
 app.use((req, res, next) => {
   const error = new Error("NOT FOUND !!");
-  error.status = 404;
+  error.status = 200;
   next(error);
 });
 

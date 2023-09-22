@@ -1,29 +1,36 @@
-const { request } = require("express");
+const {request } = require("express");
 const express = require("express");
 const mongoose = require("mongoose");
-const { updatedOne } = require("../models/player");
+const Messages = require("../../messages/messages");
+const updatedOne  = require("../models/player");
 const router = express.Router();
 const Player = require("../models/player");
 
 router.get("/", (req, res, next) => {
+  
   Player.find({})
-    .then((result) => {
-      console.log(result);
-      res.status(200).json({
-        message: "Player Saved",
-        team: {
-          title: result.title,
-          author: result.author,
-          id: result._id,
-          metadata: {
-            method: req.method,
-            host: req.hostname,
-          },
-        },
-      });
+  .select("name_id")
+  .populate("team", "name player")
+  .exec()
+    .then((player) => {
+      if(!player) {
+        console.log(player);
+        return res.status(404).json.json({
+          message: Messages.team_not_found,
+  
+          
+        })
+      }
+
+      res.json({
+       message: "Player - POST",
+       id: player
+
+      })
+
     })
+    
     .catch((err) => {
-      console.error(err.message);
       res.status(500).json({
         error: {
           message: err.message,
@@ -33,65 +40,69 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/", (req, res, next) => {
-  const newPlayer = new Player({
+
+const newPlayer =  new Player({
     _id: mongoose.Types.ObjectId(),
     name: req.body.name,
-    number: req.body.number,
+    number: req.body.number
+
   });
 
-  newPlayer
-    .save()
-    .then((result) => {
-      console.log(result);
-      res.status(200).json({
-        message: "Player Saved",
-        team: {
-          name: result.name,
-          number: result.number,
-          id: result._id,
-          metadata: {
-            method: req.method,
-            host: req.hostname,
-          },
-        },
+ newPlayer.updateOne()
+  .select("name_id")
+  .populate("team", "name player")
+  .exec()
+    .then((player) => {
+      if(!player) {
+        console.log(player);
+        return res.status(404).json({
+          message: Messages.player_not_found
+          })
+        }
+        res.status(201).json({
+          player: player
+
+  
+        })
+
+      })
+      .catch((err) => {
+        res.status(500).json({
+          error: {
+            message: err.message,
+          }
+        })
       });
-    })
-    .catch((err) => {
-      console.error(err.message);
-      res.status(500).json({
-        error: {
-          message: err.message,
-        },
-      });
-    });
-});
+  });
+  
 
 router.get("/:playerId", (req, res, next) => {
   const playerId = req.params.playerId;
-
+  
   Player.findById(playerId)
-    .then((result) => {
-      console.log(result);
-      res.status(200).json({
-        message: "Player Saved",
-        team: {
-          name: result.name,
-          number: result.number,
-          id: result._id,
-          metadata: {
-            method: req.method,
-            host: req.hostname,
-          },
-        },
-      });
+  .select("name_id")
+  .populate("team", "name player")
+  .exec()
+    .then((player) => {
+      if(!player) {
+        console.log(player);
+        return res.status(404).json({
+          message: Messages.player_not_found
+        })
+        
+      }
+      res.status(201).json({
+        player: player
+
+      })
+
     })
     .catch((err) => {
-      console.error(err.message);
       res.status(500).json({
         error: {
           message: err.message,
-        },
-      });
+        }
+      })
     });
 });
 
@@ -138,28 +149,26 @@ router.patch("/:playerId", (req, res, next) => {
 router.delete("/:playerId", (req, res, next) => {
   const playerId = req.params.playerId;
 
-  Player.findByIdAndDelete(playerId)
+  Player.deleteOne({
+    _id: playerId
+  })
+  .exec()
     .then((result) => {
       res.status(200).json({
-        message: "Updated Player",
-        Player: {
-          name: result.name,
-          number: result.number,
-          id: result._id,
-        },
-        metadata: {
-          host: req.hostname,
-          method: req.method,
-        },
+        message: "Team Deleted",
+        request: {
+          method: "GET",
+          url: "http://localhost:3000/players/" + playerId,
+    }
+  
       });
     })
     .catch((err) => {
       res.status(500).json({
-        error: {
-          message: err.message,
-        },
+        message: err.message,
+        });
       });
     });
-});
+
 
 module.exports = router;
