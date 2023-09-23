@@ -147,11 +147,13 @@ router.patch("/:playerId", (req, res, next) => {
 });
 
 router.delete("/:playerId", (req, res, next) => {
-  const playerId = req.params.playerId;
+  const player = await Player.findByIdAndRemove(req.body.id);
 
   Player.deleteOne({
-    _id: playerId
+    _id: player
   })
+  .select("name_id")
+  .populate("team", "name player")
   .exec()
     .then((result) => {
       res.status(200).json({
