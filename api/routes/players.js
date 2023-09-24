@@ -45,8 +45,8 @@ const newPlayer =  new Player({
 
   });
 
- newPlayer.save()
-  .select("name_id")
+  newPlayer.save()
+  // .select("name_id")
   //
   // .exec()
     .then(player => {
