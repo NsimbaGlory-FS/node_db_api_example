@@ -45,10 +45,10 @@ const newPlayer =  new Player({
 
   });
 
-  newPlayer.save()
-  // .select("name_id")
-  //
-  // .exec()
+  Player.find()
+  .select("name_id")
+  .populate("team", "name player")
+  .exec()
     .then(player => {
       if(!player) {
         console.log(player);
