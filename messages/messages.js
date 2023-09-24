@@ -1,3 +1,3 @@
 module.exports = {
-  team_not_found: "Team Not Found",
+  player_not_found: "Player Not Found",
 };

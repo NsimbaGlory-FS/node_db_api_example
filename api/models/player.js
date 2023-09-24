@@ -2,12 +2,13 @@ const mongoose = require("mongoose");
 
 const playerSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: {
+  team: {
     type: String,
+    ref: "Team",
     require: true,
   },
   number: {
-    type: Number,
+    type: String,
     require: true,
   },
 });

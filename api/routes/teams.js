@@ -36,8 +36,6 @@ router.post("/", (req, res, next) => {
     country: req.body.country
 
   });
-
-  // write to the db
   newTeam.save()
   .then(result => {
     console.log(result);
@@ -134,10 +132,10 @@ router.patch("/:teamId", (req, res, next) => {
 });
 
 router.delete("/:teamId", async(req, res) => {
-  const team = await Team.findByIdAndRemove(req.body.id);
+  const teamId = req.params.teamId;
 
   Team.deleteOne({
-    _id: team,
+    _id: teamId,
   })
     .exec()
     .then((result) => {
@@ -145,7 +143,7 @@ router.delete("/:teamId", async(req, res) => {
         message: "Team Deleted",
         request: {
           method: "GET",
-          url: "http://localhost:3000/teams/" + team,
+          url: "http://localhost:3000/teams/" + teamId,
         },
       });
     })

@@ -1,4 +1,4 @@
-const {request } = require("express");
+const {request}  = require("express");
 const express = require("express");
 const mongoose = require("mongoose");
 const Messages = require("../../messages/messages");
@@ -21,11 +21,8 @@ router.get("/", (req, res, next) => {
           
         })
       }
-
-      res.json({
-       message: "Player - POST",
-       id: player
-
+      res.status(201).json({
+        player: player
       })
 
     })
@@ -42,7 +39,7 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
 
 const newPlayer =  new Player({
-    _id: mongoose.Types.ObjectId(),
+    _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     number: req.body.number
 
@@ -50,26 +47,31 @@ const newPlayer =  new Player({
 
  newPlayer.updateOne()
   .select("name_id")
-  .populate("team", "name player")
+   .populate("team", "name player")
   .exec()
-    .then((player) => {
+    .then(player => {
       if(!player) {
         console.log(player);
         return res.status(404).json({
-          message: Messages.player_not_found
+          message: "Messages.player_not_found"
           })
         }
-        res.status(201).json({
-          player: player
+        // res.status(201).json({
+        //   player: player
+
+          res.json({
+            message: "Player - Saved",
+            id: player
+     
 
   
         })
 
       })
-      .catch((err) => {
+      .catch(err => {
         res.status(500).json({
-          error: {
-            message: err.message,
+          error:{
+            message: err.message
           }
         })
       });
@@ -83,7 +85,7 @@ router.get("/:playerId", (req, res, next) => {
   .select("name_id")
   .populate("team", "name player")
   .exec()
-    .then((player) => {
+    .then(player => {
       if(!player) {
         console.log(player);
         return res.status(404).json({
@@ -97,7 +99,7 @@ router.get("/:playerId", (req, res, next) => {
       })
 
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(500).json({
         error: {
           message: err.message,
@@ -147,15 +149,15 @@ router.patch("/:playerId", (req, res, next) => {
 });
 
 router.delete("/:playerId", (req, res, next) => {
-  const player = await Player.findByIdAndRemove(req.body.id);
+  const playerId = req.params.playerId;
 
   Player.deleteOne({
-    _id: player
+    _id: playerId
   })
   .select("name_id")
   .populate("team", "name player")
   .exec()
-    .then((result) => {
+    .then(result => {
       res.status(200).json({
         message: "Team Deleted",
         request: {
@@ -165,7 +167,7 @@ router.delete("/:playerId", (req, res, next) => {
   
       });
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(500).json({
         message: err.message,
         });
