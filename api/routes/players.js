@@ -16,13 +16,13 @@ router.get("/", (req, res, next) => {
       if(!player) {
         console.log(player);
         return res.status(404).json.json({
-          message: Messages.team_not_found,
+          message: Messages.player_not_found,
   
           
         })
       }
       res.status(201).json({
-        player: player
+        number: player
       })
 
     })
@@ -45,10 +45,10 @@ const newPlayer =  new Player({
 
   });
 
- newPlayer.updateOne()
+ newPlayer.save()
   .select("name_id")
-   .populate("team", "name player")
-  .exec()
+  //
+  // .exec()
     .then(player => {
       if(!player) {
         console.log(player);
